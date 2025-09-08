@@ -19,7 +19,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<UserResponse> getAllUser() {
-        //return List.of();
         List<UserResponse> userResponses = new ArrayList<UserResponse>();
         List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
 
