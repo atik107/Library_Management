@@ -7,7 +7,7 @@ import com.example.demo.application.service.RentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.demo.application.enums.StatusType.RENT;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -16,7 +16,6 @@ import static com.example.demo.application.enums.StatusType.RENT;
 
 public class RentController {
     private final RentService rentService;
-
 
 
     @PostMapping
@@ -31,14 +30,19 @@ public class RentController {
         rentRequest.setBookname(rentDto.getBookName());
 
 
-        switch (rentRequest.getStatus()){
-            case RENT :
+        switch (rentRequest.getStatus()) {
+            case RENT:
                 return rentService.createRent(rentRequest);
             case RETURN:
                 return rentService.deleteRent(userId, bookId);
             default:
                 throw new IllegalStateException("Unexpected value: " + rentRequest.getStatus());
         }
+    }
+
+    @GetMapping("/books")
+    public List<RentResponse> getRentedBooks() {
+        return rentService.getRentedBooks();
     }
 
 

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -42,6 +43,12 @@ public class RentServiceImpl implements RentService {
 
         UserEntity userEntity = userRepository.findById(createRentRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found, id: " + createRentRequest.getUserId()));
+
+
+        long activeRents = rentRepository.countByUserId(userEntity.getId());
+        if (activeRents >= 3) {
+            throw new RuntimeException("User cannot rent more than 3 books at the same time.");
+        }
 
         bookEntity.setRentCount(bookEntity.getRentCount() + 1);
         bookRepository.save(bookEntity);
@@ -99,4 +106,45 @@ public class RentServiceImpl implements RentService {
                 .userName(userEntity.getName())
                 .build();
     }
+
+
+
+    @Override
+    public List<RentResponse> getRentedBooks() {
+        // Get all distinct book id
+        List<Long> rentedBookIds = rentRepository.findDistinctBookIds();
+
+        List<RentResponse> rentedBooks = new ArrayList<>();
+
+        for (Long bookId : rentedBookIds) {
+            // Fetch the book
+            BookEntity book = bookRepository.findById(bookId).orElse(null);
+            if (book == null) continue;
+
+            // Fetch the most recent rent for this book
+            List<RentEntity> rents = rentRepository.findByBookIdOrderByRentDateDesc(bookId);
+            if (rents.isEmpty()) continue;
+
+            RentEntity lastRent = rents.getFirst(); // latest rent
+            UserEntity user = userRepository.findById(lastRent.getUserId()).orElse(null);
+
+            // Build the response
+            RentResponse response = RentResponse.builder()
+                    .bookId(book.getId())
+                    .userId(user != null ? user.getId() : null)
+                    .bookName(book.getName())
+                    .bookCount(book.getBookCount())
+                    .rentCount(book.getRentCount())
+                    .author(book.getAuthor())
+                    .userName(user != null ? user.getName() : "Unknown")
+                    .status(StatusType.RENT)
+                    .build();
+
+            rentedBooks.add(response);
+        }
+
+        return rentedBooks;
+    }
+
+
 }
