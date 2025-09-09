@@ -17,7 +17,7 @@ public interface RentRepository extends JpaRepository<RentEntity, Long> {
 
     List<RentEntity> findByBookIdOrderByRentDateDesc(long bookId);
 
-    // Fetch distinct book IDs directly from database
+    // find distinct book id
     @Query("SELECT DISTINCT r.bookId FROM RentEntity r")
     List<Long> findDistinctBookIds();
 

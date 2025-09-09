@@ -3,6 +3,7 @@ package com.example.demo.api.endpoint;
 import com.example.demo.api.payload.dto.RentDto;
 import com.example.demo.api.payload.request.RentRequest;
 import com.example.demo.api.payload.response.RentResponse;
+import com.example.demo.application.error.exception.CustomException;
 import com.example.demo.application.service.RentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class RentController {
     @PostMapping
     public RentResponse CreateRent(@RequestHeader("X-KM-UserId") long userId,
                                    @RequestHeader("X-KM-BookId") long bookId,
-                                   @RequestBody RentDto rentDto) {
+                                   @RequestBody RentDto rentDto) throws CustomException {
 
         RentRequest rentRequest = new RentRequest();
 
@@ -36,7 +37,7 @@ public class RentController {
             case RETURN:
                 return rentService.deleteRent(userId, bookId);
             default:
-                throw new IllegalStateException("Unexpected value: " + rentRequest.getStatus());
+                throw new CustomException("5", "Unexpected value: " + rentRequest.getStatus());
         }
     }
 
@@ -44,7 +45,6 @@ public class RentController {
     public List<RentResponse> getRentedBooks() {
         return rentService.getRentedBooks();
     }
-
 
 
 //    @DeleteMapping("/rent")
