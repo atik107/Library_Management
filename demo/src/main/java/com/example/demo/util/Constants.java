@@ -8,5 +8,6 @@ public interface Constants {
         String COMMA = ",";
         String SPACE = " ";
         String COLON = ":";
+        String COMPONENT_CODE = "01_";
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice(assignableTypes = BookController.class)
+
 public class BookExceptionResolver extends GlobalExceptionResolver {
 
     @Override

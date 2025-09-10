@@ -66,7 +66,6 @@ public class RentServiceImpl implements RentService {
         }
 
         bookEntity.setRentCount(bookEntity.getRentCount() + 1);
-        ;
         bookRepository.save(bookEntity);
 
         RentEntity rentEntity = RentEntity.builder()
@@ -125,7 +124,7 @@ public class RentServiceImpl implements RentService {
                         ErrorCode.NO_USER_FOUND.getMessage()
                                 + "userId"
                                 + Constants.Symbols.COLON
-                                + Constants.Symbols.SPACE+
+                                + Constants.Symbols.SPACE
                                 + bookId
                         )
                 );

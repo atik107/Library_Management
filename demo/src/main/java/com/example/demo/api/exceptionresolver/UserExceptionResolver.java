@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice(assignableTypes = UserController.class)
+
 public class UserExceptionResolver extends GlobalExceptionResolver {
 
     @Override

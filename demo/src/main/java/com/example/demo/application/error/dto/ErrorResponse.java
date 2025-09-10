@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class ErrorResponse {
     String reason;
     String message;

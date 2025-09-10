@@ -8,6 +8,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class CustomException extends Exception {
 
     String code;

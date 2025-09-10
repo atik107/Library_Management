@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
+
 public enum ErrorCode {
 
     BOOK_NOT_FOUND("001", "Book not found"),
