@@ -1,6 +1,6 @@
 package com.example.demo.application.service;
 
-import com.example.demo.api.payload.request.RentRequest;
+import com.example.demo.api.payload.request.RentDto;
 import com.example.demo.api.payload.response.RentResponse;
 import com.example.demo.application.domain.BookEntity;
 import com.example.demo.application.domain.RentEntity;
@@ -32,14 +32,14 @@ public class RentServiceImpl implements RentService {
     private final UserRepository userRepository;
 
     @Override
-    public RentResponse createRent(RentRequest createRentRequest) throws CustomException {
+    public RentResponse createRent(RentDto createRentDto) throws CustomException {
 
-        BookEntity bookEntity = bookRepository.findByName(createRentRequest.getBookname());
+        BookEntity bookEntity = bookRepository.findByName(createRentDto.getBookname());
 
         if (bookEntity == null) {
             throw new CustomException(
                     ErrorCode.BOOK_NOT_FOUND.getCode(),
-                    ErrorCode.BOOK_NOT_FOUND.getMessage() + ": " + createRentRequest.getBookname()
+                    ErrorCode.BOOK_NOT_FOUND.getMessage() + ": " + createRentDto.getBookname()
             );
         }
         if (bookEntity.getBookCount() <= bookEntity.getRentCount()) {
@@ -50,10 +50,10 @@ public class RentServiceImpl implements RentService {
         }
 
 
-        UserEntity userEntity = userRepository.findById(createRentRequest.getUserId())
+        UserEntity userEntity = userRepository.findById(createRentDto.getUserId())
                 .orElseThrow(() -> new CustomException(
                         ErrorCode.NO_USER_FOUND.getCode(),
-                        ErrorCode.NO_USER_FOUND.getMessage() + createRentRequest.getUserId())
+                        ErrorCode.NO_USER_FOUND.getMessage() + createRentDto.getUserId())
                 );
 
 
@@ -84,7 +84,7 @@ public class RentServiceImpl implements RentService {
                 .bookCount(bookEntity.getBookCount())
                 .rentCount(bookEntity.getRentCount())
                 .author(bookEntity.getAuthor())
-                .status(createRentRequest.getStatus())
+                .status(createRentDto.getStatus())
                 .userName(userEntity.getName())
                 .build();
     }

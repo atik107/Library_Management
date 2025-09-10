@@ -1,10 +1,11 @@
 package com.example.demo.api.endpoint;
 
-import com.example.demo.api.payload.dto.RentDto;
-import com.example.demo.api.payload.request.RentRequest;
+import com.example.demo.api.payload.dto.RentRequest;
+import com.example.demo.api.payload.request.RentDto;
 import com.example.demo.api.payload.response.RentResponse;
 import com.example.demo.application.error.exception.CustomException;
 import com.example.demo.application.service.RentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/rent")
+@Tag(name = "Book Rent API")
 
 public class RentController {
     private final RentService rentService;
@@ -22,22 +24,21 @@ public class RentController {
     @PostMapping
     public RentResponse CreateRent(@RequestHeader("X-KM-UserId") long userId,
                                    @RequestHeader("X-KM-BookId") long bookId,
-                                   @RequestBody RentDto rentDto) throws CustomException {
+                                   @RequestBody RentRequest rentRequest) throws CustomException {
 
-        RentRequest rentRequest = new RentRequest();
+        RentDto rentDto = RentDto.builder()
+                .userId(userId)
+                .bookname(rentRequest.getBookName())
+                .status(rentRequest.getStatus())
+                .build();
 
-        rentRequest.setUserId(userId);
-        rentRequest.setStatus(rentDto.getStatus());
-        rentRequest.setBookname(rentDto.getBookName());
-
-
-        switch (rentRequest.getStatus()) {
+        switch (rentDto.getStatus()) {
             case RENT:
-                return rentService.createRent(rentRequest);
+                return rentService.createRent(rentDto);
             case RETURN:
                 return rentService.deleteRent(userId, bookId);
             default:
-                throw new CustomException("5", "Unexpected value: " + rentRequest.getStatus());
+                throw new CustomException("5", "Unexpected value: " + rentDto.getStatus());
         }
     }
 

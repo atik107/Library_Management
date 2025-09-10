@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class GlobalExceptionResolver {
 
     public static String COMPONENT_CODE = Constants.Symbols.COMPONENT_CODE;
+
     public String getFeatureCode() {
         return "000_";
     }

@@ -20,6 +20,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResponse createBook(BookRequest newbookRequest) {
+
         BookEntity entity = BookEntity.builder()
                 .name(newbookRequest.getName())
                 .author(newbookRequest.getAuthor())
@@ -51,6 +52,8 @@ public class BookServiceImpl implements BookService {
         }
         bookEntity.setName(updatedBook.getName());
         bookEntity.setAuthor(updatedBook.getAuthor());
+        bookEntity.setBookCount(updatedBook.getBookCount());
+        bookEntity.setRentCount(updatedBook.getRentCount());
         BookEntity saveEntity = bookRepository.save(bookEntity);
         return BookResponse.from(saveEntity);
     }

@@ -1,7 +1,5 @@
 package com.example.demo.api.payload.response;
 
-import com.example.demo.api.payload.request.RentRequest;
-import com.example.demo.application.domain.BookEntity;
 import com.example.demo.application.domain.RentEntity;
 import com.example.demo.application.enums.StatusType;
 import lombok.*;
